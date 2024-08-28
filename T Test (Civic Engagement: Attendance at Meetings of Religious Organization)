@@ -1,0 +1,554 @@
+Factor = rep(c("Neighborhood Insecurity", "Crime", "Democratic Support", "Coup Justification"), 2),
+Score = c(
+80, mean(c(75, 70)), mean(c(85, 80, 75)), mean(c(65, 60, 55)), # Bolivia
+70, mean(c(65, 60)), mean(c(78, 76, 74)), mean(c(60, 58, 53)) # Paraguay
+),
+Weight = rep(weights, 2)
+)
+# Calculate the weighted score for each factor
+scores$Weighted_Score <- scores$Score * scores$Weight
+# Perform ANOVA
+anova_result <- aov(Weighted_Score ~ Country, data = scores)
+# Display ANOVA summary
+summary(anova_result)
+# Sample Data Creation
+data <- data.frame(
+Country = rep(c("Bolivia", "Paraguay"), each = 10),
+Year = rep(c(2023, 2018, 2016, 2014, 2012, 2010, 2008, 2006, 2004), times = 2),
+Confidence_Judiciary = c(34.12, 38.65, 35.98, 36.27, 39.38, 39.86, 38.06, 36.47, 32.52, 29.90, 35.85, 33.03, 38.50, 36.71, 35.63, 24.30, 27.02),
+Coup_Corruption = c(47.19, 45.82, 38.52, 32.53, 29.79, 45.06, 41.38, 37.19, 47.47, 44.70, 36.10, 45.06, 34.75, 44.22, 56.15, 51.78, 40.80, 34.84),
+Coup_Crime = c(44.32, 42.11, 37.79, 24.13, 49.23, 39.20, 43.88, 44.74, 41.06, 45.07, 41.80, 46.64, 51.46, 54.03, 48.12, 34.60),
+Democracy_Support = c(57.48, 59.75, 56.87, 61.01, 67.36, 61.78, 70.32, 71.76, 66.21, 63.20, 57.39, 54.89, 58.83, 56.33, 62.51, 69.05, 63.33, 62.91),
+Category = rep(c("Confidence in Judiciary", "Coup Justified when Corruption is High", "Coup Justified when Crime is High", "Democracy is Better than Any Other Form of Government"), each = 18)
+)
+# Sample Data Construction (make sure all vectors are of the same length)
+data <- data.frame(
+Country = rep(c("Bolivia", "Paraguay"), each = 9),
+Year = rep(c(2023, 2018, 2016, 2014, 2012, 2010, 2008, 2006, 2004), times = 2),
+Confidence_Judiciary = c(34.12, 38.65, 35.98, 36.27, 39.38, 39.86, 38.06, 36.47, 32.52,
+29.90, 35.85, 33.03, 38.50, 36.71, 35.63, 24.30, 27.02, NA), # Assume NA for missing 2004 data for Paraguay
+Coup_Corruption = c(47.19, 45.82, 38.52, 32.53, 29.79, 45.06, 41.38, 37.19, 47.47,
+36.10, 45.06, 34.75, 44.22, 56.15, 51.78, 40.80, 34.84, NA), # Assume NA for missing 2004 data for Paraguay
+Coup_Crime = c(44.32, 42.11, 37.79, 24.13, 49.23, 39.20, 43.88, 44.74, 41.06,
+45.07, 41.80, 46.64, 51.46, 54.03, 48.12, 34.60, NA, NA), # Assume NA for missing 2006 and 2004 data for Paraguay
+Democracy_Support = c(57.48, 59.75, 56.87, 61.01, 67.36, 61.78, 70.32, 71.76, 66.21,
+57.39, 54.89, 58.83, 56.33, 62.51, 69.05, 63.33, 62.91, NA) # Assume NA for missing 2004 data for Paraguay
+)
+# Using melt from data.table to reshape data for ANOVA
+library(data.table)
+long_data <- melt(setDT(data), id.vars = c("Country", "Year"), variable.name = "Category", value.name = "Score")
+# Remove rows with NA Scores to ensure clean data for ANOVA
+long_data <- na.omit(long_data)
+# View the data structure
+print(long_data)
+# Load necessary library
+library(stats)
+# Perform ANOVA on the cleaned and complete dataset
+anova_results <- aov(Score ~ Category * Country + Year, data = long_data)
+# Display the results
+summary(anova_results)
+# Example Data Setup
+data <- data.frame(
+Country = rep(c("Bolivia", "Paraguay"), each = 20),
+Year = rep(c(2004:2023), times = 2),
+Confidence_Judiciary = runif(40, min = 20, max = 80), # Random scores between 20 and 80
+Coup_Corruption = runif(40, min = 20, max = 80),
+Coup_Crime = runif(40, min = 20, max = 80),
+Democracy_Support = runif(40, min = 20, max = 80),
+Executive_Legislature = runif(40, min = 20, max = 80),
+Dissolve_Supreme = runif(40, min = 20, max = 80),
+Neighborhood_Insecurity = runif(40, min = 20, max = 80),
+Satisfaction_Democracy = runif(40, min = 20, max = 80),
+Victim_Crime = runif(40, min = 20, max = 80),
+Victim_Crime_Last_Year = runif(40, min = 20, max = 80)
+)
+# Reshape the data into a long format suitable for ANOVA
+library(reshape2)
+# Load the tidyverse package
+library(tidyverse)
+# Example Data Setup
+data <- tibble(
+Country = rep(c("Bolivia", "Paraguay"), each = 20),
+Year = rep(c(2004:2023), times = 2),
+Confidence_Judiciary = runif(40, min = 20, max = 80),
+Coup_Corruption = runif(40, min = 20, max = 80),
+Coup_Crime = runif(40, min = 20, max = 80),
+Democracy_Support = runif(40, min = 20, max = 80),
+Executive_Legislature = runif(40, min = 20, max = 80),
+Dissolve_Supreme = runif(40, min = 20, max = 80),
+Neighborhood_Insecurity = runif(40, min = 20, max = 80),
+Satisfaction_Democracy = runif(40, min = 20, max = 80),
+Victim_Crime = runif(40, min = 20, max = 80),
+Victim_Crime_Last_Year = runif(40, min = 20, max = 80)
+)
+# Reshape the data into a long format
+long_data <- data %>%
+pivot_longer(
+cols = c(Confidence_Judiciary, Coup_Corruption, Coup_Crime, Democracy_Support,
+Executive_Legislature, Dissolve_Supreme, Neighborhood_Insecurity,
+Satisfaction_Democracy, Victim_Crime, Victim_Crime_Last_Year),
+names_to = "Category",
+values_to = "Score"
+)
+# Function to perform ANOVA and print the results
+perform_anova <- function(data, category) {
+cat("ANOVA for", category, ":\n")
+anova_result <- aov(Score ~ Country + Year, data = filter(data, Category == category))
+print(summary(anova_result))
+cat("\n")
+}
+# Perform ANOVA for each category
+unique_categories <- unique(long_data$Category)
+map(unique_categories, ~perform_anova(long_data, .))
+# Load necessary library
+library(stats)
+# Data Setup
+bolivia_data <- data.frame(
+Year = c(2023, 2021, 2018, 2016, 2014, 2012, 2010, 2008, 2006, 2004),
+Score = c(41.612197267, 47.520925924, 42.991964572, 46.881979031, 44.529466979,
+54.833205913, 53.561635992, 50.990573460, 47.949257072, 50.360958814)
+)
+paraguay_data <- data.frame(
+Year = c(2023, 2021, 2018, 2016, 2014, 2012, 2010, 2008, 2006),
+Score = c(51.671306316, 49.963319018, 53.073529805, 50.390431413, 58.406084480,
+69.975568814, 57.971992744, 57.466318977, 59.084402781)
+)
+# ANOVA for Bolivia
+bolivia_anova <- aov(Score ~ Year, data = bolivia_data)
+summary(bolivia_anova)
+# ANOVA for Paraguay
+paraguay_anova <- aov(Score ~ Year, data = paraguay_data)
+summary(paraguay_anova)
+# Example Data Setup
+data <- data.frame(
+Country = rep(c("Bolivia", "Paraguay"), each = 10),
+Year = rep(c(2023, 2021, 2018, 2016, 2014, 2012, 2010, 2008, 2006, 2004), 2),
+Score = c(41.612197267, 47.520925924, 42.991964572, 46.881979031, 44.529466979,
+54.833205913, 53.561635992, 50.990573460, 47.949257072, 50.360958814,
+51.671306316, 49.963319018, 53.073529805, 50.390431413, 58.406084480,
+69.975568814, 57.971992744, 57.466318977, 59.084402781, NA) # NA for missing 2004 data in Paraguay
+)
+# Removing NA values for clean analysis
+data <- na.omit(data)
+# ANOVA to compare between countries
+country_anova <- aov(Score ~ Country, data = data)
+summary(country_anova)
+# Load necessary libraries
+library(ggplot2)
+# Data setup
+data <- data.frame(
+Country = rep(c("Bolivia", "Paraguay"), each = 10),
+Score = c(41.612, 47.521, 42.992, 46.882, 44.529,
+54.833, 53.562, 50.991, 47.949, 50.361,
+51.671, 49.963, 53.074, 50.390, 58.406,
+69.976, 57.972, 57.466, 59.084, NA) # NA for missing data
+)
+# Removing NA values for clean visualization
+data <- na.omit(data)
+# Create the plot
+ggplot(data, aes(x = Country, y = Score, fill = Country)) +
+geom_boxplot(alpha = 0.5, color = "black", outlier.shape = NA) + # Boxplot
+geom_point(position = position_dodge(width = 0.75), pch = 21, color = "black") + # Add points
+labs(title = "Perception of Neighborhood Insecurity: Bolivia vs. Paraguay",
+y = "Score",
+x = "Country") +
+theme_minimal() +
+theme(plot.title = element_text(hjust = 0.5), # Center the plot title
+legend.title = element_blank()) # Remove legend title
+# Show the plot
+g
+# Assuming the same data as before
+data <- data.frame(
+Country = rep(c("Bolivia", "Paraguay"), each = 10),
+Score = c(41.612, 47.521, 42.992, 46.882, 44.529,
+54.833, 53.562, 50.991, 47.949, 50.361,
+51.671, 49.963, 53.074, 50.390, 58.406,
+69.976, 57.972, 57.466, 59.084, NA) # NA for missing data
+)
+# Remove NA values
+data <- na.omit(data)
+# Calculate mean and standard error for each country
+summary_stats <- data %>%
+group_by(Country) %>%
+summarise(Mean = mean(Score),
+SD = sd(Score),
+SE = SD / sqrt(n()),
+.groups = 'drop')
+# Plotting
+ggplot(summary_stats, aes(x = Country, y = Mean, fill = Country)) +
+geom_bar(stat = "identity", position = position_dodge(), color = "black", width = 0.5) +
+geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE), width = 0.2) +
+labs(title = "Comparison of Neighborhood Insecurity Between Bolivia and Paraguay",
+x = "Country",
+y = "Mean Score with Error Bars") +
+theme_minimal() +
+theme(plot.title = element_text(hjust = 0.5)) +
+scale_fill_brewer(palette = "Pastel1") # Aesthetic color scheme
+# Data for the ANOVA results
+anova_results <- data.frame(
+Category = c("Country", "Residuals"),
+Df = c(1, 17),
+Sum_Sq = c(328.0, 481.5),
+Mean_Sq = c(328.0, 28.3),
+F_value = c(11.58, NA), # NA for residuals as F value does not apply
+Pr_F = c(0.00338, NA) # NA for residuals
+)
+# Creating the plot
+library(ggplot2)
+ggplot(anova_results, aes(x = Category, y = F_value, fill = Category)) +
+geom_bar(stat = "identity", width = 0.5) +
+geom_text(aes(label = sprintf("F = %.2f\np = %.4f", F_value, Pr_F), y = F_value + 1),
+position = position_dodge(width = 0.5), vjust = -0.5) +
+labs(title = "ANOVA Results: Effect of Country on Perception Scores",
+x = "Source of Variation",
+y = "F-value") +
+theme_minimal() +
+theme(plot.title = element_text(hjust = 0.5),
+legend.title = element_blank()) +
+scale_fill_manual(values = c("Country" = "steelblue", "Residuals" = "grey"))
+# Load necessary library
+library(dplyr)
+# Data setup
+data <- data.frame(
+Country = rep(c("Bolivia", "Paraguay"), each = 9),
+Year = rep(c(2023, 2021, 2018, 2016, 2014, 2012, 2010, 2008, 2006), 2),
+Trust_in_Local_Government = c(49.5691, 58.0335, 48.1368, 49.5750, 48.2166,
+49.5474, 53.1639, 53.8264, 54.9918, 53.07513,
+54.99763, 51.28657, 52.05075, 52.01119, 52.46400,
+55.28141, 48.77575, 53.18941)
+)
+# Run ANOVA
+anova_result <- aov(Trust_in_Local_Government ~ Country, data = data)
+summary(anova_result)
+# Load necessary library
+library(dplyr)
+# Data setup
+data <- data.frame(
+Country = rep(c("Country1", "Country2"), each = 7), # Replace with actual country names if available
+Year = rep(c(2023, 2016, 2014, 2012, 2010, 2008, 2006), 2),
+Attendance = c(4.2801, 5.4361, 5.1666, 5.3670, 7.7102, 3.7610, 7.7878, 14.4781, 12.7081, 12.0160, 10.5799, 9.8316, 11.1780, 6.8228)
+)
+# Run ANOVA
+anova_result <- aov(Attendance ~ Country, data = data)
+summary(anova_result)
+# Load necessary library
+library(ggplot2)
+# Data setup
+data <- data.frame(
+Country = rep(c("Country1", "Country2"), each = 7), # Replace with actual country names if available
+Year = rep(c(2023, 2016, 2014, 2012, 2010, 2008, 2006), 2),
+Attendance = c(4.2801, 5.4361, 5.1666, 5.3670, 7.7102, 3.7610, 7.7878, 14.4781, 12.7081, 12.0160, 10.5799, 9.8316, 11.1780, 6.8228)
+)
+# Create the boxplot
+ggplot(data, aes(x = Country, y = Attendance, fill = Country)) +
+geom_boxplot() +
+labs(title = "Attendance at Meetings of Political Parties: Country Comparison",
+x = "Country",
+y = "Attendance Score") +
+theme_minimal() +
+theme(plot.title = element_text(hjust = 0.5)) # Center the plot title
+# Load necessary library
+library(ggplot2)
+# Data setup
+data <- data.frame(
+Country = rep(c("Bolivia", "Paraguay"), each = 7),
+Year = rep(c(2023, 2016, 2014, 2012, 2010, 2008, 2006), 2),
+Attendance = c(4.2801, 5.4361, 5.1666, 5.3670, 7.7102, 3.7610, 7.7878,
+14.4781, 12.7081, 12.0160, 10.5799, 9.8316, 11.1780, 6.8228)
+)
+# Create the boxplot
+ggplot(data, aes(x = Country, y = Attendance, fill = Country)) +
+geom_boxplot() +
+labs(title = "Attendance at Meetings of Political Parties: Bolivia vs. Paraguay",
+x = "Country",
+y = "Attendance Score") +
+theme_minimal() +
+theme(plot.title = element_text(hjust = 0.5)) # Center the plot title
+# Load necessary library
+library(ggplot2)
+# Data setup
+data <- data.frame(
+Country = rep(c("Bolivia", "Paraguay"), each = 7),
+Year = rep(c(2023, 2016, 2014, 2012, 2010, 2008, 2006), 2),
+Attendance = c(4.2801, 5.4361, 5.1666, 5.3670, 7.7102, 3.7610, 7.7878,
+14.4781, 12.7081, 12.0160, 10.5799, 9.8316, 11.1780, 6.8228)
+)
+# Create the boxplot
+ggplot(data, aes(x = Country, y = Attendance, fill = Country)) +
+geom_boxplot() +
+labs(title = "Attendance at Meetings of Political Parties: Bolivia vs. Paraguay",
+x = "Country",
+y = "Attendance Score") +
+theme_minimal() +
+theme(plot.title = element_text(hjust = 0.5)) # Center the plot title
+# Load necessary library
+library(ggplot2)
+# Data setup
+data <- data.frame(
+Country = rep(c("Bolivia", "Paraguay"), each = 7),
+Year = rep(c(2023, 2016, 2014, 2012, 2010, 2008, 2006), 2),
+Attendance = c(4.2801, 5.4361, 5.1666, 5.3670, 7.7102, 3.7610, 7.7878,
+14.4781, 12.7081, 12.0160, 10.5799, 9.8316, 11.1780, 6.8228)
+)
+# Create the boxplot with outliers displayed
+ggplot(data, aes(x = Country, y = Attendance, fill = Country)) +
+geom_boxplot(outlier.shape = 16, outlier.size = 2) +
+labs(title = "Attendance at Meetings of Political Parties: Bolivia vs. Paraguay",
+x = "Country",
+y = "Attendance Score") +
+theme_minimal() +
+theme(plot.title = element_text(hjust = 0.5)) # Center the plot title
+# Load necessary library
+library(ggplot2)
+# Data setup
+data <- data.frame(
+Country = rep(c("Bolivia", "Paraguay"), each = 7),
+Year = rep(c(2023, 2016, 2014, 2012, 2010, 2008, 2006), 2),
+Attendance = c(4.2801, 5.4361, 5.1666, 5.3670, 7.7102, 3.7610, 7.7878,
+14.4781, 12.7081, 12.0160, 10.5799, 9.8316, 11.1780, 6.8228)
+)
+# Create the boxplot with data points
+ggplot(data, aes(x = Country, y = Attendance, fill = Country)) +
+geom_boxplot(outlier.shape = 16, outlier.size = 2, alpha = 0.7) + # Transparent boxplot to overlay points
+geom_jitter(width = 0.2, size = 2, color = "black", alpha = 0.8) + # Jitter points to avoid overlap
+labs(title = "Attendance at Meetings of Political Parties: Bolivia vs. Paraguay",
+x = "Country",
+y = "Attendance Score") +
+theme_minimal() +
+theme(plot.title = element_text(hjust = 0.5)) # Center the plot title
+# Load necessary library
+library(ggplot2)
+# Data setup
+data <- data.frame(
+Country = rep(c("Bolivia", "Paraguay"), each = 7),
+Year = rep(c(2023, 2016, 2014, 2012, 2010, 2008, 2006), 2),
+Attendance = c(4.2801, 5.4361, 5.1666, 5.3670, 7.7102, 3.7610, 7.7878,
+14.4781, 12.7081, 12.0160, 10.5799, 9.8316, 11.1780, 6.8228)
+)
+# Create the boxplot with data points
+ggplot(data, aes(x = Country, y = Attendance, fill = Country)) +
+geom_boxplot(outlier.shape = 16, outlier.size = 2, alpha = 0.7) + # Transparent boxplot to overlay points
+geom_jitter(width = 0.2, size = 2, color = "black", alpha = 0.8) + # Jitter points to avoid overlap
+labs(title = "Attendance at Meetings of Political Parties: Bolivia vs. Paraguay",
+x = "Country",
+y = "Attendance Score") +
+theme_minimal() +
+theme(plot.title = element_text(hjust = 0.5)) # Center the plot title
+# Load necessary library
+library(ggplot2)
+# Data setup
+data <- data.frame(
+Country = rep(c("Bolivia", "Paraguay"), each = 7),
+Year = rep(c(2023, 2016, 2014, 2012, 2010, 2008, 2006), 2),
+Attendance = c(4.2801, 5.4361, 5.1666, 5.3670, 7.7102, 3.7610, 7.7878,
+14.4781, 12.7081, 12.0160, 10.5799, 9.8316, 11.1780, 6.8228)
+)
+# Create the boxplot with outliers displayed
+ggplot(data, aes(x = Country, y = Attendance, fill = Country)) +
+geom_boxplot(outlier.shape = 16, outlier.size = 2) +
+labs(title = "Attendance at Meetings of Political Parties: Bolivia vs. Paraguay",
+x = "Country",
+y = "Attendance Score") +
+theme_minimal() +
+theme(plot.title = element_text(hjust = 0.5)) # Center the plot title
+# Load necessary library
+library(ggplot2)
+# Data setup
+data <- data.frame(
+Country = rep(c("Bolivia", "Paraguay"), each = 7),
+Year = rep(c(2023, 2016, 2014, 2012, 2010, 2008, 2006), 2),
+Attendance = c(4.2801, 5.4361, 5.1666, 5.3670, 7.7102, 3.7610, 7.7878,
+14.4781, 12.7081, 12.0160, 10.5799, 9.8316, 11.1780, 6.8228)
+)
+# Create the boxplot
+ggplot(data, aes(x = Country, y = Attendance, fill = Country)) +
+geom_boxplot() +
+labs(title = "Attendance at Meetings of Political Parties: Bolivia vs. Paraguay",
+x = "Country",
+y = "Attendance Score") +
+theme_minimal() +
+theme(plot.title = element_text(hjust = 0.5)) # Center the plot title
+# Assuming you already have this from the previous ANOVA
+anova_result <- aov(Attendance ~ Country, data = data)
+summary(anova_result)
+# Perform Tukey's HSD test
+tukey_result <- TukeyHSD(anova_result)
+# View the result
+print(tukey_result)
+# Load necessary library
+library(ggplot2)
+# Data setup
+data <- data.frame(
+Country = rep(c("Bolivia", "Paraguay"), each = 7),
+Year = rep(c(2023, 2016, 2014, 2012, 2010, 2008, 2006), 2),
+Attendance = c(4.2801, 5.4361, 5.1666, 5.3670, 7.7102, 3.7610, 7.7878,
+14.4781, 12.7081, 12.0160, 10.5799, 9.8316, 11.1780, 6.8228)
+)
+# Perform ANOVA
+anova_result <- aov(Attendance ~ Country, data = data)
+# Perform Tukey's HSD post-hoc test
+tukey_result <- TukeyHSD(anova_result)
+# Print the Tukey HSD results
+print(tukey_result)
+# Plot the Tukey HSD results
+plot(tukey_result)
+# Aligned Bolivia and Paraguay data
+bolivia <- c(41.61, 47.52, 42.99, 46.88, 44.53, 54.83, 53.56, 50.99, 47.95)
+paraguay <- c(51.67, 49.96, 53.07, 50.39, 58.41, 69.98, 57.97, 57.47, 59.08)
+# Perform independent t-test
+t_test_result <- t.test(bolivia, paraguay)
+# Print the result
+print(t_test_result)
+# Load necessary library
+library(ggplot2)
+# Prepare the data for visualization
+data <- data.frame(
+Country = rep(c("Bolivia", "Paraguay"), each = 9),
+Year = rep(c(2023, 2021, 2018, 2016, 2014, 2012, 2010, 2008, 2006), 2),
+Insecurity = c(bolivia, paraguay)
+)
+# Create the boxplot with data points
+ggplot(data, aes(x = Country, y = Insecurity, fill = Country)) +
+geom_boxplot() +
+geom_jitter(width = 0.2, color = "black", size = 1.5, alpha = 0.6) + # Add data points
+labs(title = "Perception of Neighborhood Insecurity: Bolivia vs Paraguay",
+x = "Country",
+y = "Insecurity Score") +
+theme_minimal() +
+theme(plot.title = element_text(hjust = 0.5)) # Center the plot title
+# Data setup for aligned years
+# Group 1 data (Bolivia, for example)
+group1 <- c(4.2801, 5.4361, 5.1666, 5.3670, 7.7102, 3.7610, 7.7878) # Aligned years
+# Group 2 data (Paraguay, for example)
+group2 <- c(14.4781, 12.7081, 12.0160, 10.5799, 9.8316, 11.1780, 6.8228) # Aligned years
+# Perform independent t-test
+t_test_result <- t.test(group1, group2)
+# Print the result
+print(t_test_result)
+# Load necessary library
+library(ggplot2)
+# Aligned data for the two groups
+data <- data.frame(
+Country = rep(c("Bolivia", "Paraguay"), each = 7),
+Attendance = c(4.2801, 5.4361, 5.1666, 5.3670, 7.7102, 3.7610, 7.7878, 14.4781, 12.7081, 12.0160, 10.5799, 9.8316, 11.1780, 6.8228)
+)
+# Create the boxplot
+ggplot(data, aes(x = Country, y = Attendance, fill = Country)) +
+geom_boxplot() +
+geom_jitter(shape = 16, position = position_jitter(0.2)) + # Add jitter to show individual points
+labs(title = "Civic Engagement: Attendance at Meetings of Political Parties",
+x = "Country",
+y = "Attendance Score") +
+theme_minimal() +
+theme(plot.title = element_text(hjust = 0.5)) # Center the plot title
+# Load necessary library
+library(ggplot2)
+# Align the data (exclude years where both don't line up)
+bolivia <- c(41.61, 47.52, 42.99, 46.88, 44.53, 54.83, 53.56, 50.99, 47.95)
+paraguay <- c(51.67, 49.96, 53.07, 50.39, 58.41, 69.98, 57.97, 57.47, 59.08)
+# Perform independent t-test
+t_test_result <- t.test(bolivia, paraguay)
+# Print the t-test result
+print(t_test_result)
+# Create a data frame for visualization
+data <- data.frame(
+Country = rep(c("Bolivia", "Paraguay"), each = 9),
+Year = rep(c(2023, 2021, 2018, 2016, 2014, 2012, 2010, 2008, 2006), 2),
+Perception = c(bolivia, paraguay)
+)
+# Visualize the data using a boxplot with data points
+ggplot(data, aes(x = Country, y = Perception, fill = Country)) +
+geom_boxplot() +
+geom_jitter(shape = 16, position = position_jitter(0.2)) +
+labs(title = "Democratic Support: Perception of Neighborhood Insecurity",
+x = "Country",
+y = "Perception Score") +
+theme_minimal() +
+theme(plot.title = element_text(hjust = 0.5)) # Center the plot title
+# Calculate simple averages for Bolivia and Paraguay
+average_score_bolivia <- mean(c(48.17, 51.23, 6.99))
+average_score_paraguay <- mean(c(57.00, 52.55, 11.36))
+# Assign weights (for example: 0.5 for Neighborhood Insecurity, 0.3 for Trust, 0.2 for Attendance)
+weights <- c(0.5, 0.3, 0.2)
+# Calculate weighted averages for Bolivia and Paraguay
+weighted_score_bolivia <- sum(weights * c(48.17, 51.23, 6.99))
+weighted_score_paraguay <- sum(weights * c(57.00, 52.55, 11.36))
+# Replace the placeholder with actual aggregate scores
+aggregate_data <- data.frame(
+Country = c("Bolivia", "Paraguay"),
+Aggregate_Score = c(average_score_bolivia, average_score_paraguay) # Insert your calculated scores here
+)
+# Print to check
+print(aggregate_data)
+# Visualize the aggregate differences
+ggplot(aggregate_data, aes(x = Country, y = Aggregate_Score, fill = Country)) +
+geom_bar(stat = "identity") +
+labs(title = "Aggregate Differences Across Democratic Support Factors",
+x = "Country",
+y = "Aggregate Score") +
+theme_minimal() +
+theme(plot.title = element_text(hjust = 0.5)) # Center the plot title
+# Data setup
+bolivia_data <- c(40.16, 39.61, 40.61, 43.00, 46.79, 49.58, 47.06, 55.76)
+paraguay_data <- c(47.29, 47.74, 50.78, 56.15, 55.47, 52.99, 43.38, 51.88)
+# Perform t-test
+t_test_result <- t.test(bolivia_data, paraguay_data, paired = TRUE)
+# Print t-test result
+print(t_test_result)
+# Combine the data into a data frame for visualization
+attendance_data <- data.frame(
+Country = rep(c("Bolivia", "Paraguay"), each = 8),
+Year = rep(c(2023, 2018, 2016, 2014, 2012, 2010, 2008, 2006), 2),
+Attendance = c(bolivia_data, paraguay_data)
+)
+# Create the boxplot with data points
+ggplot(attendance_data, aes(x = Country, y = Attendance, fill = Country)) +
+geom_boxplot() +
+geom_jitter(color = "black", size = 1, width = 0.2) +
+labs(title = "Civic Engagement: Attendance at Meetings of Religious Organization",
+x = "Country",
+y = "Attendance Score") +
+theme_minimal() +
+theme(plot.title = element_text(hjust = 0.5)) # Center the plot title
+
+
+
+> # Data setup
+> bolivia_data <- c(40.16, 39.61, 40.61, 43.00, 46.79, 49.58, 47.06, 55.76)
+> paraguay_data <- c(47.29, 47.74, 50.78, 56.15, 55.47, 52.99, 43.38, 51.88)
+> 
+> # Perform t-test
+> t_test_result <- t.test(bolivia_data, paraguay_data, paired = TRUE)
+> 
+> # Print t-test result
+> print(t_test_result)
+
+	Paired t-test
+
+data:  bolivia_data and paraguay_data
+t = -2.4249, df = 7, p-value = 0.04576
+alternative hypothesis: true mean difference is not equal to 0
+95 percent confidence interval:
+ -10.6434732  -0.1340268
+sample estimates:
+mean difference 
+       -5.38875 
+
+> 
+> # Combine the data into a data frame for visualization
+> attendance_data <- data.frame(
++     Country = rep(c("Bolivia", "Paraguay"), each = 8),
++     Year = rep(c(2023, 2018, 2016, 2014, 2012, 2010, 2008, 2006), 2),
++     Attendance = c(bolivia_data, paraguay_data)
++ )
+> 
+> # Create the boxplot with data points
+> ggplot(attendance_data, aes(x = Country, y = Attendance, fill = Country)) +
++     geom_boxplot() +
++     geom_jitter(color = "black", size = 1, width = 0.2) +
++     labs(title = "Civic Engagement: Attendance at Meetings of Religious Organization",
++          x = "Country",
++          y = "Attendance Score") +
++     theme_minimal() +
++     theme(plot.title = element_text(hjust = 0.5))  # Center the plot title
+> 
