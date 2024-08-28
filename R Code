@@ -1,0 +1,124 @@
+> # Load necessary packages
+> library(ggplot2)
+> library(tidyr)
+> library(dplyr)
+> 
+> # Example data frame
+> data <- data.frame(
++     Year = c(2004, 2006, 2008, 2010, 2012, 2014, 2016, 2018, 2021, 2023),
++     Bolivia_Safety = c(50.36, 47.95, 50.99, 53.56, 54.83, 44.53, 46.88, 43.00, NA, 41.61),
++     Paraguay_Safety = c(59.08, 57.47, 57.97, 69.98, 58.41, NA, 50.39, 53.07, 49.96, 51.67)
++ )
+> 
+> # Reshape data to long format for ggplot
+> data_long <- pivot_longer(data, cols = -Year, names_to = "Country_Type", values_to = "Score")
+> data_long <- separate(data_long, Country_Type, into = c("Country", "Type"), sep = "_")
+> 
+> # Box plot for Safety scores
+> ggplot(data_long, aes(x = Country, y = Score, fill = Country)) +
++     geom_boxplot() +
++     labs(title = "Distribution of Perception of Neighborhood Safety by Country",
++          x = "Country",
++          y = "Perception Score") +
++     theme_minimal() +
++     scale_fill_manual(values = c("Bolivia" = "skyblue", "Paraguay" = "salmon"))
+Warning message:
+Removed 2 rows containing non-finite outside the scale range
+(`stat_boxplot()`). 
+> 
+> # Calculate means and standard deviations for plotting
+> summary_stats <- data_long %>%
++     group_by(Country) %>%
++     summarise(
++         Mean = mean(Score, na.rm = TRUE),
++         SD = sd(Score, na.rm = TRUE),
++         N = n()
++     )
+> 
+> # Add a column for standard error
+> summary_stats <- summary_stats %>%
++     mutate(SE = SD / sqrt(N))
+> 
+> # Plot with means and standard errors
+> ggplot(summary_stats, aes(x = Country, y = Mean, fill = Country)) +
++     geom_bar(stat = "identity", position = position_dodge(), color = "black") +
++     geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE), width = 0.2, position = position_dodge(0.9)) +
++     labs(title = "Mean Perception of Neighborhood Safety by Country",
++          x = "Country",
++          y = "Mean Perception Score") +
++     theme_minimal() +
++     scale_fill_manual(values = c("Bolivia" = "skyblue", "Paraguay" = "salmon"))
+> 
+> # Install packages if needed
+> install.packages(c("ggplot2", "dplyr", "tidyr"))
+Error in install.packages : Updating loaded packages
+> 
+> # Load packages
+> library(ggplot2)
+> library(dplyr)
+> library(tidyr)
+> 
+
+Restarting R session...
+
+> install.packages(c("ggplot2", "dplyr", "tidyr"))
+trying URL 'https://cran.rstudio.com/bin/macosx/big-sur-arm64/contrib/4.4/ggplot2_3.5.1.tgz'
+Content type 'application/x-gzip' length 4974305 bytes (4.7 MB)
+==================================================
+downloaded 4.7 MB
+
+trying URL 'https://cran.rstudio.com/bin/macosx/big-sur-arm64/contrib/4.4/dplyr_1.1.4.tgz'
+Content type 'application/x-gzip' length 1599250 bytes (1.5 MB)
+==================================================
+downloaded 1.5 MB
+
+trying URL 'https://cran.rstudio.com/bin/macosx/big-sur-arm64/contrib/4.4/tidyr_1.3.1.tgz'
+Content type 'application/x-gzip' length 1324134 bytes (1.3 MB)
+==================================================
+downloaded 1.3 MB
+
+
+The downloaded binary packages are in
+	/var/folders/hp/bh0tqx8n78555v2y16_730q00000gn/T//RtmpRE9hPx/downloaded_packages
+> # Install packages if needed
+> install.packages(c("ggplot2", "dplyr", "tidyr"))
+Error in install.packages : Updating loaded packages
+> 
+> # Load packages
+> library(ggplot2)
+> library(dplyr)
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+> library(tidyr)
+> 
+
+Restarting R session...
+
+> install.packages(c("ggplot2", "dplyr", "tidyr"))
+trying URL 'https://cran.rstudio.com/bin/macosx/big-sur-arm64/contrib/4.4/ggplot2_3.5.1.tgz'
+Content type 'application/x-gzip' length 4974305 bytes (4.7 MB)
+==================================================
+downloaded 4.7 MB
+
+trying URL 'https://cran.rstudio.com/bin/macosx/big-sur-arm64/contrib/4.4/dplyr_1.1.4.tgz'
+Content type 'application/x-gzip' length 1599250 bytes (1.5 MB)
+==================================================
+downloaded 1.5 MB
+
+trying URL 'https://cran.rstudio.com/bin/macosx/big-sur-arm64/contrib/4.4/tidyr_1.3.1.tgz'
+Content type 'application/x-gzip' length 1324134 bytes (1.3 MB)
+==================================================
+downloaded 1.3 MB
+
+
+The downloaded binary packages are in
+	/var/folders/hp/bh0tqx8n78555v2y16_730q00000gn/T//Rtmp6ot5YM/downloaded_packages
