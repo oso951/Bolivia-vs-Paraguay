@@ -1,11 +1,14 @@
-> # Aligned Bolivia and Paraguay data
+> # Load necessary library
+> library(ggplot2)
+> 
+> # Align the data (exclude years where both don't line up)
 > bolivia <- c(41.61, 47.52, 42.99, 46.88, 44.53, 54.83, 53.56, 50.99, 47.95)
 > paraguay <- c(51.67, 49.96, 53.07, 50.39, 58.41, 69.98, 57.97, 57.47, 59.08)
 > 
 > # Perform independent t-test
 > t_test_result <- t.test(bolivia, paraguay)
 > 
-> # Print the result
+> # Print the t-test result
 > print(t_test_result)
 
 	Welch Two Sample t-test
@@ -20,23 +23,20 @@ mean of x mean of y
  47.87333  56.44444 
 
 > 
-> # Load necessary library
-> library(ggplot2)
-> 
-> # Prepare the data for visualization
+> # Create a data frame for visualization
 > data <- data.frame(
 +     Country = rep(c("Bolivia", "Paraguay"), each = 9),
 +     Year = rep(c(2023, 2021, 2018, 2016, 2014, 2012, 2010, 2008, 2006), 2),
-+     Insecurity = c(bolivia, paraguay)
++     Perception = c(bolivia, paraguay)
 + )
 > 
-> # Create the boxplot with data points
-> ggplot(data, aes(x = Country, y = Insecurity, fill = Country)) +
+> # Visualize the data using a boxplot with data points
+> ggplot(data, aes(x = Country, y = Perception, fill = Country)) +
 +     geom_boxplot() +
-+     geom_jitter(width = 0.2, color = "black", size = 1.5, alpha = 0.6) +  # Add data points
-+     labs(title = "Perception of Neighborhood Insecurity: Bolivia vs Paraguay",
++     geom_jitter(shape = 16, position = position_jitter(0.2)) +
++     labs(title = "Democratic Support: Perception of Neighborhood Insecurity",
 +          x = "Country",
-+          y = "Insecurity Score") +
++          y = "Perception Score") +
 +     theme_minimal() +
 +     theme(plot.title = element_text(hjust = 0.5))  # Center the plot title
 > 
