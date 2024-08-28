@@ -1,0 +1,42 @@
+> # Aligned Bolivia and Paraguay data
+> bolivia <- c(41.61, 47.52, 42.99, 46.88, 44.53, 54.83, 53.56, 50.99, 47.95)
+> paraguay <- c(51.67, 49.96, 53.07, 50.39, 58.41, 69.98, 57.97, 57.47, 59.08)
+> 
+> # Perform independent t-test
+> t_test_result <- t.test(bolivia, paraguay)
+> 
+> # Print the result
+> print(t_test_result)
+
+	Welch Two Sample t-test
+
+data:  bolivia and paraguay
+t = -3.3331, df = 14.651, p-value = 0.004667
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -14.063509  -3.078713
+sample estimates:
+mean of x mean of y 
+ 47.87333  56.44444 
+
+> 
+> # Load necessary library
+> library(ggplot2)
+> 
+> # Prepare the data for visualization
+> data <- data.frame(
++     Country = rep(c("Bolivia", "Paraguay"), each = 9),
++     Year = rep(c(2023, 2021, 2018, 2016, 2014, 2012, 2010, 2008, 2006), 2),
++     Insecurity = c(bolivia, paraguay)
++ )
+> 
+> # Create the boxplot with data points
+> ggplot(data, aes(x = Country, y = Insecurity, fill = Country)) +
++     geom_boxplot() +
++     geom_jitter(width = 0.2, color = "black", size = 1.5, alpha = 0.6) +  # Add data points
++     labs(title = "Perception of Neighborhood Insecurity: Bolivia vs Paraguay",
++          x = "Country",
++          y = "Insecurity Score") +
++     theme_minimal() +
++     theme(plot.title = element_text(hjust = 0.5))  # Center the plot title
+> 
