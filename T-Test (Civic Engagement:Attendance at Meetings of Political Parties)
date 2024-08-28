@@ -1,0 +1,44 @@
+> # Data setup for aligned years
+> 
+> # Group 1 data (Bolivia, for example)
+> group1 <- c(4.2801, 5.4361, 5.1666, 5.3670, 7.7102, 3.7610, 7.7878)  # Aligned years
+> 
+> # Group 2 data (Paraguay, for example)
+> group2 <- c(14.4781, 12.7081, 12.0160, 10.5799, 9.8316, 11.1780, 6.8228)  # Aligned years
+> 
+> # Perform independent t-test
+> t_test_result <- t.test(group1, group2)
+> 
+> # Print the result
+> print(t_test_result)
+
+	Welch Two Sample t-test
+
+data:  group1 and group2
+t = -5.0076, df = 10.266, p-value = 0.0004906
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -7.857372 -3.029971
+sample estimates:
+mean of x mean of y 
+ 5.644114 11.087786 
+
+> 
+> # Load necessary library
+> library(ggplot2)
+> 
+> # Aligned data for the two groups
+> data <- data.frame(
++     Country = rep(c("Bolivia", "Paraguay"), each = 7),
++     Attendance = c(4.2801, 5.4361, 5.1666, 5.3670, 7.7102, 3.7610, 7.7878, 14.4781, 12.7081, 12.0160, 10.5799, 9.8316, 11.1780, 6.8228)
++ )
+> 
+> # Create the boxplot
+> ggplot(data, aes(x = Country, y = Attendance, fill = Country)) +
++     geom_boxplot() +
++     geom_jitter(shape = 16, position = position_jitter(0.2)) +  # Add jitter to show individual points
++     labs(title = "Civic Engagement: Attendance at Meetings of Political Parties",
++          x = "Country",
++          y = "Attendance Score") +
++     theme_minimal() +
++     theme(plot.title = element_text(hjust = 0.5))  # Center the plot title
