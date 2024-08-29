@@ -1,0 +1,45 @@
+> # Load necessary library
+> library(ggplot2)
+> 
+> # Data for Bolivia
+> bolivia <- c(50.763331238, 52.411419443, 43.900418963, 45.421292928, 
++              52.046535263, 43.965114750, 50.682906234)
+> 
+> # Data for Paraguay
+> paraguay <- c(55.995524503, 55.313185433, 50.428593348, 52.392597058, 
++               51.862463073, 64.327484674, 58.462003161)
+> 
+> # Perform independent t-test
+> t_test_result <- t.test(bolivia, paraguay)
+> 
+> # Print the t-test result
+> print(t_test_result)
+
+	Welch Two Sample t-test
+
+data:  bolivia and paraguay
+t = -3.064, df = 11.504, p-value = 0.01027
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -12.146246  -2.022563
+sample estimates:
+mean of x mean of y 
+ 48.45586  55.54026 
+
+> 
+> # Create a data frame for visualization
+> data <- data.frame(
++     Country = rep(c("Bolivia", "Paraguay"), each = 7),
++     Year = rep(c(2018, 2016, 2014, 2012, 2010, 2008, 2006), 2),
++     Perception = c(bolivia, paraguay)
++ )
+> 
+> # Visualize the data using a boxplot with data points
+> ggplot(data, aes(x = Country, y = Perception, fill = Country)) +
++     geom_boxplot() +
++     geom_jitter(shape = 16, position = position_jitter(0.2)) +
++     labs(title = "Tolerance: Approval of Government Critics' Right to Vote",
++          x = "Country",
++          y = "Perception Score") +
++     theme_minimal() +
++     theme(plot.title = element_text(hjust = 0.5))  # Center the plot title
