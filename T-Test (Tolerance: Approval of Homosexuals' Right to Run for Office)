@@ -1,0 +1,45 @@
+> # Load necessary library
+> library(ggplot2)
+> 
+> # Data for Bolivia (excluding 2004)
+> bolivia <- c(42.644094087, 41.700458479, 43.480056875, 34.377581033, 
++              37.980895035, 36.662254910, 37.893120467, 34.855260723)
+> 
+> # Data for Paraguay (excluding 2004)
+> paraguay <- c(35.009479556, 32.562143491, 35.260070679, 34.372833812, 
++               33.533949993, 27.140883349, 28.645679523, 28.603937275)
+> 
+> # Perform independent t-test
+> t_test_result <- t.test(bolivia, paraguay)
+> 
+> # Print the t-test result
+> print(t_test_result)
+
+	Welch Two Sample t-test
+
+data:  bolivia and paraguay
+t = 4.0217, df = 13.923, p-value = 0.001274
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+  3.175446 10.440740
+sample estimates:
+mean of x mean of y 
+ 38.69922  31.89112 
+
+> 
+> # Create a data frame for visualization
+> data <- data.frame(
++     Country = rep(c("Bolivia", "Paraguay"), each = 8),
++     Year = rep(c(2023, 2018, 2016, 2014, 2012, 2010, 2008, 2006), 2),
++     Perception = c(bolivia, paraguay)
++ )
+> 
+> # Visualize the data using a boxplot with data points
+> ggplot(data, aes(x = Country, y = Perception, fill = Country)) +
++     geom_boxplot() +
++     geom_jitter(shape = 16, position = position_jitter(0.2)) +
++     labs(title = "Tolerance: Approval of Homosexuals' Right to Run for Office",
++          x = "Country",
++          y = "Perception Score") +
++     theme_minimal() +
++     theme(plot.title = element_text(hjust = 0.5))  # Center the plot title
