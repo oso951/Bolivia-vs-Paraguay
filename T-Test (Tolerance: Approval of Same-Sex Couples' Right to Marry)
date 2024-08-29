@@ -1,0 +1,45 @@
+> # Load necessary library
+> library(ggplot2)
+> 
+> # Data for Bolivia
+> bolivia <- c(37.321247970, 33.245524292, 34.738500703, 22.203045735, 
++              24.673033612, 24.715697320)
+> 
+> # Data for Paraguay
+> paraguay <- c(26.276987231, 22.006832473, 26.097324091, 20.756436165, 
++               16.133941849, 16.064718571)
+> 
+> # Perform independent t-test
+> t_test_result <- t.test(bolivia, paraguay)
+> 
+> # Print the t-test result
+> print(t_test_result)
+
+	Welch Two Sample t-test
+
+data:  bolivia and paraguay
+t = 2.5918, df = 9.0376, p-value = 0.02903
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+  1.055131 15.465139
+sample estimates:
+mean of x mean of y 
+ 29.48284  21.22271 
+
+> 
+> # Create a data frame for visualization
+> data <- data.frame(
++     Country = rep(c("Bolivia", "Paraguay"), each = 6),
++     Year = rep(c(2023, 2018, 2016, 2014, 2012, 2010), 2),
++     Perception = c(bolivia, paraguay)
++ )
+> 
+> # Visualize the data using a boxplot with data points
+> ggplot(data, aes(x = Country, y = Perception, fill = Country)) +
++     geom_boxplot() +
++     geom_jitter(shape = 16, position = position_jitter(0.2)) +
++     labs(title = "Tolerance: Approval of Same-Sex Couples' Right to Marry",
++          x = "Country",
++          y = "Perception Score") +
++     theme_minimal() +
++     theme(plot.title = element_text(hjust = 0.5))  # Center the plot title
