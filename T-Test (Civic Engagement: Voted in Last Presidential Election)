@@ -1,0 +1,44 @@
+> # Load necessary library
+> library(ggplot2)
+> 
+> # Data for Bolivia (excluding 2006)
+> bolivia <- c(89.136817381, 81.000595593, 85.562130178, 76.241536460, 
++              81.796527516, 89.407027865, 74.286085235)
+> 
+> # Data for Paraguay (excluding 2006)
+> paraguay <- c(67.614011897, 73.082010582, 68.024439919, 74.167776298, 
++               60.628342246, 66.823687752, 71.897435897)
+> 
+> # Perform independent t-test
+> t_test_result <- t.test(bolivia, paraguay)
+> 
+> # Print the t-test result
+> print(t_test_result)
+
+	Welch Two Sample t-test
+
+data:  bolivia and paraguay
+t = 4.7804, df = 11.353, p-value = 0.0005229
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+  7.361466 19.836539
+sample estimates:
+mean of x mean of y 
+  82.4901   68.8911 
+
+> 
+> # Create a data frame for visualization
+> data <- data.frame(
++     Country = rep(c("Bolivia", "Paraguay"), each = 7),
++     Perception = c(bolivia, paraguay)
++ )
+> 
+> # Create the boxplot with jittered data points
+> ggplot(data, aes(x = Country, y = Perception, fill = Country)) +
++     geom_boxplot() +
++     geom_jitter(shape = 16, position = position_jitter(0.2)) +
++     labs(title = "Civic Engagement: Voted in Last Presidential Election",
++          x = "Country",
++          y = "Perception Score") +
++     theme_minimal() +
++     theme(plot.title = element_text(hjust = 0.5))  # Center the plot title
