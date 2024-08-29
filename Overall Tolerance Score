@@ -1,0 +1,41 @@
+> # Load necessary library
+> library(ggplot2)
+> 
+> # Data for Bolivia
+> bolivia <- data.frame(
++     Year = c(2023, 2016, 2014, 2012, 2010, 2008, 2006),
++     Speeches = c(43.354985688, 42.875815653, 36.405829573, 41.403607016, 43.402462183, 37.934977713, 37.482982208),
++     RunForOffice = c(50.763331238, 52.411419443, 43.900418963, 45.421292928, 52.046535263, 43.965114750, 50.682906234),
++     Vote = c(55.515729779, 55.108127120, 49.882636812, 55.670599733, 56.181687358, 59.684238564, 56.740749717),
++     LegalDemonstrations = c(55.515729779, 55.108127120, 49.882636812, 55.670599733, 56.181687358, 59.684238564, 56.740749717)
++ )
+> 
+> # Data for Paraguay
+> paraguay <- data.frame(
++     Year = c(2023, 2016, 2014, 2012, 2010, 2008, 2006),
++     Speeches = c(45.727655577, 45.872685764, 42.190246712, 47.523808386, 43.656918716, 60.442477018, 54.927579143),
++     RunForOffice = c(55.995524503, 55.313185433, 50.428593348, 52.392597058, 51.862463073, 64.327484674, 58.462003161),
++     Vote = c(60.439067110, 63.248435516, 72.203077864, 74.256386709, 73.806275048, 81.500671157, 75.790187408),
++     LegalDemonstrations = c(60.439067110, 63.248435516, 72.203077864, 74.256386709, 73.806275048, 81.500671157, 75.790187408)
++ )
+> 
+> # Calculate average tolerance score for each year
+> bolivia$AverageTolerance <- rowMeans(bolivia[, -1])
+> paraguay$AverageTolerance <- rowMeans(paraguay[, -1])
+> 
+> # Combine data into one data frame
+> combined_data <- data.frame(
++     Year = rep(bolivia$Year, 2),
++     Country = rep(c("Bolivia", "Paraguay"), each = 7),
++     AverageTolerance = c(bolivia$AverageTolerance, paraguay$AverageTolerance)
++ )
+> 
+> # Create a line plot
+> ggplot(combined_data, aes(x = Year, y = AverageTolerance, color = Country, group = Country)) +
++     geom_line(size = 1.2) +
++     geom_point(size = 3) +
++     labs(title = "Overall Tolerance Score: Bolivia vs Paraguay",
++          x = "Year",
++          y = "Average Tolerance Score") +
++     theme_minimal() +
++     theme(plot.title = element_text(hjust = 0.5))
